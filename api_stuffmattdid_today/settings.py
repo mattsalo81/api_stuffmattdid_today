@@ -23,11 +23,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'f9vkdebwl7lj7isg&6f^g!h*s)%jvpz#8sqvdl$_m%(k_=xf%d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ['DJANGO_DEBUG']
 
 ALLOWED_HOSTS = [
     'apistuffmattdidtoday-dev.us-east-2.elasticbeanstalk.com',
     'api.stuffmattdid.today',
+    'localhost',
 ]
 
 
@@ -123,3 +124,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Amazon S3 Storage
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storage.backends.s3boto3.S3Boto3Storage'
+AWS_ACCESS_KEY_ID = os.environ['AWS_S3_ACCESS_KEY_ID']
+AWS_SECRET_ACCESS_KEY = os.environ['AWS_S3_SECRET_ACCESS_KEY']
+AWS_STORAGE_BUCKET_NAME = 'stuffmattdid'
+
