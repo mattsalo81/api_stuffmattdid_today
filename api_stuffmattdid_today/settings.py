@@ -26,7 +26,8 @@ SECRET_KEY = 'f9vkdebwl7lj7isg&6f^g!h*s)%jvpz#8sqvdl$_m%(k_=xf%d'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'apistuffmattdidtoday-dev.us-east-2.elasticbeanstalk.com'
+    'apistuffmattdidtoday-dev.us-east-2.elasticbeanstalk.com',
+    'api.stuffmattdid.today',
 ]
 
 
