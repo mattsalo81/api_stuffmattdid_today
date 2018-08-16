@@ -29,6 +29,7 @@ ALLOWED_HOSTS = [
     'apistuffmattdidtoday-dev.us-east-2.elasticbeanstalk.com',
     'api.stuffmattdid.today',
     'localhost',
+    '127.0.0.1',
 ]
 
 
