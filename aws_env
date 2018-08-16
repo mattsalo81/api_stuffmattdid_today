@@ -1,0 +1,9 @@
+#!/bin/bash
+
+export AWS_ENV=apistuffmattdidtoday-dev
+eb use "$AWS_ENV"
+
+eb setenv \
+DJANGO_DEBUG="$DJANGO_DEBUG" \
+AWS_S3_ACCESS_KEY_ID="$AWS_S3_ACCESS_KEY_ID" \
+AWS_S3_SECRET_ACCESS_KEY="$AWS_S3_SECRET_ACCESS_KEY" \
