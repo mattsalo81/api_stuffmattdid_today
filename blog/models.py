@@ -24,7 +24,7 @@ class ImageAttachment(models.Model):
     def __str__(self):
         return self.upload.name
 
-class Tags(models.Model):
+class Tag(models.Model):
     """
     A Tag is a word/short phrase that reflects the content of the
     post for the purposes of sorting
@@ -41,4 +41,4 @@ class Post(models.Model):
     pub_date = models.DateTimeField()
     files = models.ManyToManyField(Attachment)
     images = models.ManyToManyField(ImageAttachment)
-    tags = models.ManyToManyField(Tags)
+    tags = models.ManyToManyField(Tag)
