@@ -25,6 +25,7 @@ class Command(BaseCommand):
         try:
             bucket.download_file(latest_key, db_file)
             print("Downloaded <%s>" % latest_key)
+            os.chmod(db_file, 777)
         except botocore.exceptions.ClientError as e:
             if e.response['Error']['Code'] == "404":
                 print("Could not download Backup!")
