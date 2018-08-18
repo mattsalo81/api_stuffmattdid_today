@@ -187,3 +187,7 @@ def get_linux_ec2_private_ip():
 private_ip = get_linux_ec2_private_ip()
 if private_ip:
     ALLOWED_HOSTS.append(private_ip)
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
