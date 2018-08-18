@@ -175,7 +175,7 @@ def get_linux_ec2_private_ip():
     try:
         # url is used by ec2 to distribute metadata
         response = requests.get('http://169.254.169.254/latest/meta-data/local-ipv4')
-        return response.text()
+        return response.text
     except:
         return None
     finally:
@@ -186,7 +186,6 @@ def get_linux_ec2_private_ip():
 # add IP to allowed hosts so that healtcheck works
 private_ip = get_linux_ec2_private_ip()
 if private_ip:
-    raise Exception(private_ip)
     ALLOWED_HOSTS.append(private_ip)
 
 CSRF_COOKIE_SECURE = True
