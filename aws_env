@@ -3,6 +3,8 @@
 export AWS_ENV=apistuffmattdidtoday-dev
 eb use "$AWS_ENV"
 
+python manage.py collectstatic
+
 eb setenv \
 DJANGO_DEBUG="$DJANGO_DEBUG" \
 AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" \

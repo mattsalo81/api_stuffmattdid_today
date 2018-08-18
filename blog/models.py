@@ -42,9 +42,9 @@ class Post(models.Model):
     title = models.CharField(max_length=128)
     body = models.TextField()
     pub_date = models.DateTimeField()
-    files = models.ManyToManyField(Attachment)
-    images = models.ManyToManyField(ImageAttachment)
-    tags = models.ManyToManyField(Tag)
+    files = models.ManyToManyField(Attachment, blank=True)
+    images = models.ManyToManyField(ImageAttachment, blank=True)
+    tags = models.ManyToManyField(Tag, blank=True)
 
     def __str__(self):
         return self.title
