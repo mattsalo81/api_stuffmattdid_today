@@ -16,7 +16,7 @@ class Command(BaseCommand):
         try:
             os.mkdir(sub_folder)
         except OSError:
-            raise
+            pass
 
         # get bucket
         bucket_name = settings.AWS_STORAGE_BUCKET_NAME
