@@ -8,6 +8,16 @@ files:
       python manage.py restorelatestdb
       python manage.py opendbpermissions
       exit 0
+  "/opt/elasticbeanstalk/hooks/configdeploy/post/restoredb.sh":
+    mode: "000755"
+    owner: root
+    group: root
+    content: |
+      source /opt/python/run/venv/bin/activate
+      python manage.py restorelatestdb
+      echo "here" > /tmp/matt
+      python manage.py opendbpermissions
+      exit 0
   "/opt/elasticbeanstalk/hooks/restartappserver/pre/backupdb.sh":
     mode: "000755"
     owner: root
