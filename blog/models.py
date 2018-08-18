@@ -31,6 +31,9 @@ class Tag(models.Model):
     """
     name = models.CharField(max_length=64)
 
+    def __str__(self):
+        return self.name
+
 class Post(models.Model):
     """
     A Post has a title, a body, a publication date, a collection of
@@ -42,3 +45,6 @@ class Post(models.Model):
     files = models.ManyToManyField(Attachment)
     images = models.ManyToManyField(ImageAttachment)
     tags = models.ManyToManyField(Tag)
+
+    def __str__(self):
+        return self.title
