@@ -30,6 +30,8 @@ ALLOWED_HOSTS = [
     'api.stuffmattdid.today',
     'localhost',
     '127.0.0.1',
+    '.amazonaws.com',
+    '.elasticbeanstalk.com',
 ]
 
 
@@ -43,6 +45,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'health_check',
+    'health_check.db',
+    'health_check.cache',
+    'health_check.storage',
     'storages',
     'blog',
 ]
@@ -146,3 +152,38 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
+
+# add private ip to allowed hosts to allow EB to run health checks
+def is_ec2_linux():
+    """
+    Detect if we are running on an EC2 Linux Instance
+    http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/identify_ec2_instances.html
+    """
+    if os.path.isfile("/sys/hypervisor/uuid"):
+        with open("/sys/hypervisor/uuid") as f:
+            uuid = f.read()
+            return uuid.startswith("ec2")
+    return False
+
+def get_linux_ec2_private_ip():
+    """
+    Gets the private IP address of current EC2 machine
+    """
+    import requests
+    if not is_ec2_linux():
+        return None
+    try:
+        # url is used by ec2 to distribute metadata
+        response = requests.get('http://169.254.169.254/latest/meta-data/local-ipv4')
+        return response.text()
+    except:
+        return None
+    finally:
+        if response:
+            response.close()
+
+# detect if elastic beanstalk and get private IP
+# add IP to allowed hosts so that healtcheck works
+private_ip = get_linux_ec2_private_ip()
+if private_ip:
+    ALLOWED_HOSTS.append(private_ip)
