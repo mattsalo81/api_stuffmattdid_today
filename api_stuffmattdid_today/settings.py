@@ -82,10 +82,11 @@ WSGI_APPLICATION = 'api_stuffmattdid_today.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
+DB_DIR = 'database'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, DB_DIR, 'db.sqlite3'),
     }
 }
 

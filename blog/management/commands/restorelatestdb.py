@@ -9,6 +9,7 @@ class Command(BaseCommand):
         # get database
         db_file = os.path.abspath(settings.DATABASES['default']['NAME'])
         file_name = os.path.basename(db_file)
+        sub_folder = os.path.dirname(db_file)
         # get bucket
         bucket_name = settings.AWS_STORAGE_BUCKET_NAME
         s3 = boto3.resource('s3')
@@ -25,7 +26,11 @@ class Command(BaseCommand):
         try:
             bucket.download_file(latest_key, db_file)
             print("Downloaded <%s>" % latest_key)
+            # set file permissions
             os.chmod(db_file, 777)
+            uid = pwd.getpwnam("www-data").pw_uid
+            gid = grp.getgrnam("www-data").pr_gid
+            os.chown(sub_folder, uid, gid)
         except botocore.exceptions.ClientError as e:
             if e.response['Error']['Code'] == "404":
                 print("Could not download Backup!")
