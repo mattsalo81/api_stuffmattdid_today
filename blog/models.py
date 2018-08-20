@@ -1,4 +1,5 @@
 from django.db import models
+from rest_framework import serializers
 
 # Create your models here.
 class Attachment(models.Model):
@@ -13,6 +14,12 @@ class Attachment(models.Model):
     def __str__(self):
         return self.upload.name
 
+class AttachmentSerializer(serializers.ModelSerializer):
+    upload_date = serializers.DateTimeField()
+    class Meta:
+        model = Attachment
+        fields = '__all__'
+
 class ImageAttachment(models.Model):
     """
     An Image Attachment is an attachment that is guaranteed to be an image.
@@ -24,6 +31,12 @@ class ImageAttachment(models.Model):
     def __str__(self):
         return self.upload.name
 
+class ImageAttachmentSerializer(serializers.ModelSerializer):
+    upload_date = serializers.DateTimeField()
+    class Meta:
+        model = ImageAttachment
+        fields = '__all__'
+
 class Tag(models.Model):
     """
     A Tag is a word/short phrase that reflects the content of the
@@ -33,6 +46,12 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
+class TagSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(max_length=64)
+    class Meta:
+        model = Tag
+        fields = '__all__'
 
 class Post(models.Model):
     """
@@ -48,3 +67,16 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+class PostSerializer(serializers.ModelSerializer):
+    title = serializers.CharField(max_length=128)
+    body = serializers.CharField()
+    pub_date = serializers.DateTimeField()
+    files = AttachmentSerializer(many=True)
+    images = ImageAttachmentSerializer(many=True)
+    tags = TagSerializer(many=True)
+
+    class Meta:
+        model = Post
+        fields = '__all__'
+        depth = 2
