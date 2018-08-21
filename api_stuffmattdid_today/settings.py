@@ -27,7 +27,9 @@ DEBUG = os.environ['DJANGO_DEBUG']
 
 ALLOWED_HOSTS = [
     'apistuffmattdidtoday-dev.us-east-2.elasticbeanstalk.com',
+    'stuffmattdid.today',
     'api.stuffmattdid.today',
+    'blog.stuffmattdid.today',
     'localhost',
     '127.0.0.1',
     '.amazonaws.com',
