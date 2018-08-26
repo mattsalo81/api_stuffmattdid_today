@@ -1,0 +1,29 @@
+<a href="{{ prev_url }}">Previous Post</a>
+<a href="{{ next_url }}">Next Post</a>
+</br>
+<h1>
+{{ post.title }}
+</h1>
+</br>
+
+<font color="grey">
+TAGS: 
+{% for tag in post.tags.all %}
+    {{ tag.name }}
+{% endfor %}
+</font>
+
+<p>{{ post.body }}</p>
+</br>
+
+{% for image in post.images.all %}
+<img src="{{ image.upload.url }}" alt="{{ image }}">
+</br>
+{% endfor %}
+
+{% if post.files.all %}
+<h2>Attachments</h2>
+{% endif %}
+{% for file in post.files.all %}
+<a href="{{ file.upload.url }}">{{ file }}</a>
+{% endfor %}

@@ -46,7 +46,7 @@ class PostTestCases(TestCase):
         post = models.Post.objects.get(pk=2)
         self.assertEqual(post.title, 'Test Post about embedded control')
 
-    def test_singlepost_view(self):
+    def test_jsonpost_view(self):
         """
         queries a single known pk, checks for known fields
         (no attachment checking).  Queries a PK that does not exist
@@ -54,13 +54,13 @@ class PostTestCases(TestCase):
         """
         self.set_up_reference_posts()
         client = Client()
-        response = client.get(reverse('singlepost', kwargs={'pk': 1}))
+        response = client.get(reverse('jsonpost', kwargs={'pk': 1}))
         data = json.loads(response.content)
         self.assertEqual(data['id'], 1)
         self.assertEqual(data['title'], 'Test Post about Wine')
         self.assertEqual(data['body'], "I'm not an alcoholic")
         self.assertEqual(data['tags'][0]['name'], 'Winemaking')
-        response = client.get(reverse('singlepost', kwargs={'pk': 0}))
+        response = client.get(reverse('jsonpost', kwargs={'pk': 0}))
         self.assertEqual(response.status_code, 404)
        
     def test_nextpost_view(self):

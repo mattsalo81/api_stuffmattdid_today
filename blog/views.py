@@ -4,6 +4,7 @@ from django.core.management import call_command
 from django.core import serializers
 from .models import Post, PostSerializer
 from rest_framework.renderers import JSONRenderer
+from django.core.urlresolvers import reverse
 
 # Create your views here.
 def backupdb_view(request):
@@ -13,7 +14,7 @@ def backupdb_view(request):
     call_command('backupdb')
     return HttpResponse("Database Backed up")
 
-def singlepost_view(request, pk):
+def jsonpost_view(request, pk):
     """
     returns JSON formatted post given by the pk value
     """
@@ -54,3 +55,36 @@ def nextpost_view(request, pk):
     except Post.DoesNotExist:
         raise Http404("Next Post does not exist")
     return HttpResponse(next_post.pk)
+
+def post_view(request, pk):
+    """
+    Displays the contents of a blog post, given by the primary key
+    """
+    # get current post
+    try:
+        post = Post.objects.filter(pk=pk).select_related().get()
+    except Post.DoesNotExist:
+        raise Http404("Post does not exist")
+    # get previous post
+    try:
+        prev_post = post.get_previous_by_pub_date().pk;
+    except Post.DoesNotExist:
+        prev_post = pk;
+    # get next post
+    try:
+        next_post = post.get_next_by_pub_date().pk;
+    except Post.DoesNotExist:
+        next_post = pk;
+    # get links to next/prev posts
+    prev_url = reverse('post', kwargs={'pk': prev_post})
+    next_url = reverse('post', kwargs={'pk': next_post})
+    # render template
+    return render(request, 'blog/post.html', context={
+        'post'      : post,
+        'next_url'  : next_url,
+        'prev_url'  : prev_url,
+    })
+
+
+
+
