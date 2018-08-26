@@ -3,6 +3,7 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
+    url(r'^$', views.latestpost_view, name='latestpost'),
     url(r'^backupdb/$', views.backupdb_view, name='backupdb'),
     url(r'^post/(?P<pk>[0-9]+)/$', views.post_view, name='post'),
     url(r'^jsonpost/(?P<pk>[0-9]+)/$', views.jsonpost_view, name='jsonpost'),
