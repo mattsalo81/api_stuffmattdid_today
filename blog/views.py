@@ -15,7 +15,7 @@ def backupdb_view(request):
 
 def singlepost_view(request, pk):
     """
-    displays the post given by the pk value
+    returns JSON formatted post given by the pk value
     """
     try:
         post = Post.objects.filter(pk=pk).select_related().get()
@@ -24,3 +24,33 @@ def singlepost_view(request, pk):
     serializer = PostSerializer(post)
     content = JSONRenderer().render(serializer.data)
     return HttpResponse(content)
+
+def prevpost_view(request, pk):
+    """
+    returns the pk value of the post preceding the post given
+    by the pk value
+    """
+    try:
+        post = Post.objects.filter(pk=pk).select_related().get()
+    except Post.DoesNotExist:
+        raise Http404("Reference Post does not exist")
+    try:
+        prev_post = post.get_previous_by_pub_date();
+    except Post.DoesNotExist:
+        raise Http404("Previous Post does not exist")
+    return HttpResponse(prev_post.pk)
+
+def nextpost_view(request, pk):
+    """
+    returns the pk value of the post following the post given
+    by the pk value
+    """
+    try:
+        post = Post.objects.filter(pk=pk).select_related().get()
+    except Post.DoesNotExist:
+        raise Http404("Reference Post does not exist")
+    try:
+        next_post = post.get_next_by_pub_date();
+    except Post.DoesNotExist:
+        raise Http404("Next Post does not exist")
+    return HttpResponse(next_post.pk)

@@ -1,5 +1,6 @@
 from django.db import models
 from rest_framework import serializers
+from django.utils import timezone
 
 # Create your models here.
 class Attachment(models.Model):
@@ -64,6 +65,12 @@ class Post(models.Model):
     files = models.ManyToManyField(Attachment, blank=True)
     images = models.ManyToManyField(ImageAttachment, blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
+
+    def is_posted_in_past(self):
+        """Returns true if pub_date is in past/present, otherwise false"""
+        now = timezone.now()
+        return self.pub_date <= now
+
 
     def __str__(self):
         return self.title
