@@ -1,31 +1,58 @@
-<a href="{{ first_url }}">First</a>
-<a href="{{ prev_url }}">Previous</a>
-<a href="{{ next_url }}">Next</a>
-<a href="{{ last_url }}">Latest</a>
-</br>
-<h1>
-{{ post.title }}
-</h1>
-</br>
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static "w3.css" %}">
+</head>
+<body>
+    <div>
+        <a href="{{ first_url }}">First</a>
+        <a href="{{ prev_url }}">Previous</a>
+        <a href="{{ next_url }}">Next</a>
+        <a href="{{ last_url }}">Latest</a>
+    </div>
 
-<font color="grey">
-TAGS: 
-{% for tag in post.tags.all %}
-    {{ tag.name }}
-{% endfor %}
-</font>
+    <div>
+        <div>
+            </br>
+            <title>{{ post.title }}</title>
+            </br>
+        </div>
 
-<p>{{ post.body }}</p>
-</br>
+        <div>
+            <font color="grey">
+            TAGS: 
+            {% for tag in post.tags.all %}
+                [
+                &lt;{{ tag.name }}&gt;
+                ],
+            {% endfor %}
+            </font>
+        </div>
 
-{% for image in post.images.all %}
-<img src="{{ image.upload.url }}" alt="{{ image }}">
-</br>
-{% endfor %}
+        <div>
+            <p>
+                {{ post.body }}
+            </p>
+        </div>
 
-{% if post.files.all %}
-<h2>Attachments</h2>
-{% endif %}
-{% for file in post.files.all %}
-<a href="{{ file.upload.url }}">{{ file }}</a>
-{% endfor %}
+        </br>
+
+        <div>
+            {% for image in post.images.all %}
+                <img src="{{ image.upload.url }}" alt="{{ image }}" width=500>
+                </br>
+            {% endfor %}
+        </div>
+
+        <div>
+            {% if post.files.all %}
+                <h2>
+                    Attachments
+                </h2>
+            {% endif %}
+            {% for file in post.files.all %}
+                <a href="{{ file.upload.url }}">{{ file }}</a>
+                <br>
+            {% endfor %}
+        </div>
+    </div>
+</body>
