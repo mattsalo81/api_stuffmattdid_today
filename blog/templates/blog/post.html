@@ -2,57 +2,149 @@
     {% load static %}
     <link rel="stylesheet" href="{% static "w3.css" %}">
 </head>
-<body>
-    <div>
-        <a href="{{ first_url }}">First</a>
-        <a href="{{ prev_url }}">Previous</a>
-        <a href="{{ next_url }}">Next</a>
-        <a href="{{ last_url }}">Latest</a>
-    </div>
 
-    <div>
-        <div>
-            </br>
-            <title>{{ post.title }}</title>
-            </br>
-        </div>
+<body class="w3-content" style="max-width:1400px">
+<!-- HEADER -->
+<header class="w3-container w3-center w3-padding-32">
+    <h1><b>STUFFMATTDID.TODAY</b></h1>
+    <p>The stuff Matt did, <i>today</i></p>
+</header>
 
-        <div>
-            <font color="grey">
-            TAGS: 
-            {% for tag in post.tags.all %}
-                [
-                &lt;{{ tag.name }}&gt;
-                ],
-            {% endfor %}
-            </font>
-        </div>
+<!-- Grid -->
+<div class="w3-row">
 
-        <div>
-            <p>
-                {{ post.body }}
-            </p>
-        </div>
+<!-- Blog entries -->
+<div class="w3-col l8 s12">
 
+<!-- BLOG POST START -->
+<div class="w3-card-4 w3-margin w3-white">
+    {% for image in post.images.all %}
+        <img src="{{ image.upload.url }}" alt="{{ image }}" style="width:100%">
         </br>
-
-        <div>
-            {% for image in post.images.all %}
-                <img src="{{ image.upload.url }}" alt="{{ image }}" width=500>
-                </br>
+    {% endfor %}
+    <div class="w3-container">
+        <h3><b>{{ post.title }}</b></h3>
+        <h5>
+        [
+            {% for tag in post.tags.all %}
+                &lt;{{ tag.name }}&gt;
             {% endfor %}
-        </div>
+        ],
+        <span class="w3-opacity">{{ post.pub_date }}</span></h5>
+    </div>
 
-        <div>
-            {% if post.files.all %}
-                <h2>
-                    Attachments
-                </h2>
-            {% endif %}
-            {% for file in post.files.all %}
-                <a href="{{ file.upload.url }}">{{ file }}</a>
-                <br>
-            {% endfor %}
+    <div class="w3-container">
+        <pre>{{post.body}}</pre>
+        <div class="w3-row">
+            <div class="w3-col m8 s12">
+                <p><button class="w3-button w3-padding-large w3-white w3-border"><b>READ MORE »</b></button></p>
+            </div>
+            <div class="w3-col m4 w3-hide-small">
+                <p><span class="w3-padding-large w3-right"><b>Comments  </b> <span class="w3-tag">0</span></span></p>
+            </div>
+            <div>
+                <!-- HEADER
+                {% if post.files.all %}
+                    <h2>Attachments</h2>
+                {% endif %}
+                -->
+                {% for file in post.files.all %}
+                    <a href="{{ file.upload.url }}">{{ file }}</a>
+                    <br>
+                {% endfor %}
+            </div>
         </div>
     </div>
+
+<!-- END BLOG POST -->
+</div>
+
+<!-- END BLOG -->
+</div>
+
+<!-- Introduction menu -->
+<div class="w3-col l4">
+  <!-- About Card -->
+  <div class="w3-card w3-margin w3-margin-top">
+      <img src={% static "matt_and_brisket.jpg" %} style="width:100%">
+    <div class="w3-container w3-white">
+      <h4><b>Matt Salo</b></h4>
+      <p>
+      I do a lot of stuff, so sometimes I forget what stuff I did in the past because I didn't write what I did down when it was then.
+      Now I write down the stuff I did today, so when it's tomorrow I can look at yesterday like it's today.  It's very high concept.
+      </p>
+    </div>
+  </div>
+  <hr>
+  <!-- Posts
+  <div class="w3-card w3-margin">
+    <div class="w3-container w3-padding">
+      <h4>Most Recent Posts</h4>
+    </div>
+    <ul class="w3-ul w3-hoverable w3-white">
+      <li class="w3-padding-16">
+        <img src="/w3images/workshop.jpg" alt="Image" class="w3-left w3-margin-right" style="width:50px">
+        <span class="w3-large">Lorem</span><br>
+        <span>Sed mattis nunc</span>
+      </li>
+    </ul>
+  </div>
+  <!-- Labels / tags 
+  <div class="w3-card w3-margin">
+    <div class="w3-container w3-padding">
+      <h4>Tags</h4>
+    </div>
+    <div class="w3-container w3-white">
+    <p><span class="w3-tag w3-black w3-margin-bottom">Travel</span> <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">New York</span> <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">London</span>
+      <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">IKEA</span> <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">NORWAY</span> <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">DIY</span>
+      <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">Ideas</span> <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">Baby</span> <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">Family</span>
+      <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">News</span> <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">Clothing</span> <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">Shopping</span>
+      <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">Sports</span> <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">Games</span>
+    </p>
+    </div>
+  </div>
+  -->
+  <hr> 
+<!-- END Intro Menu -->
+</div>
+
+
+<!-- END GRID -->
+</div>
+
+<!-- END CONTENT -->
+</div>
+<hr>
+<!-- BLOG END -->
+
 </body>
+
+<!-- Footer -->
+<!-- w3-disabled -->
+<footer class="w3-container w3-dark-grey w3-padding-32 w3-margin-top">
+  {% if first_post %}
+    <a href="{{ first_url }}" class="w3-button w3-black w3-padding-large w3-margin-bottom">&laquo; First</a>
+  {% else %}
+    <button class="w3-button w3-black w3-disabled w3-padding-large w3-margin-bottom">&laquo; First</button>
+  {% endif %}
+
+  {% if prev_post %}
+    <a href="{{ prev_url }}" class="w3-button w3-black w3-padding-large w3-margin-bottom">&lsaquo; Previous</a>
+  {% else %}
+    <button class="w3-button w3-black w3-disabled w3-padding-large w3-margin-bottom">&lsaquo; Previous</button>
+  {% endif %}
+
+  {% if next_post %}
+    <a href="{{ next_url }}" class="w3-button w3-black w3-padding-large w3-margin-bottom">Next &rsaquo;</a>
+  {% else %}
+    <button class="w3-button w3-black w3-disabled w3-padding-large w3-margin-bottom">Next &rsaquo;</button>
+  {% endif %}
+
+  {% if last_post %}
+    <a href="{{ last_url }}" class="w3-button w3-black w3-padding-large w3-margin-bottom">Latest &raquo;</a>
+  {% else %}
+    <button class="w3-button w3-black w3-disabled w3-padding-large w3-margin-bottom">Latest &raquo;</button>
+  {% endif %}
+
+  <p>Style shamefully stolen from <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a>. I am not a front end developer.</p>
+</footer>

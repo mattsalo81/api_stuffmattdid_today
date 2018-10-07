@@ -25,6 +25,7 @@ def jsonpost_view(request, pk):
     serializer = PostSerializer(post)
     content = JSONRenderer().render(serializer.data)
     return HttpResponse(content) 
+
 def prevpost_view(request, pk):
     """
     returns the pk value of the post preceding the post given
@@ -35,7 +36,7 @@ def prevpost_view(request, pk):
     except Post.DoesNotExist:
         raise Http404("Reference Post does not exist")
     try:
-        prev_post = post.get_previous_by_pub_date();
+        prev_post = post.get_previous_by_pub_date()
     except Post.DoesNotExist:
         raise Http404("Previous Post does not exist")
     return HttpResponse(prev_post.pk)
@@ -50,7 +51,7 @@ def nextpost_view(request, pk):
     except Post.DoesNotExist:
         raise Http404("Reference Post does not exist")
     try:
-        next_post = post.get_next_by_pub_date();
+        next_post = post.get_next_by_pub_date()
     except Post.DoesNotExist:
         raise Http404("Next Post does not exist")
     return HttpResponse(next_post.pk)
@@ -76,19 +77,27 @@ def post_view(request, pk):
         raise Http404("Post does not exist")
     # get previous post
     try:
-        prev_post = post.get_previous_by_pub_date().pk;
+        prev_post = post.get_previous_by_pub_date().pk
     except Post.DoesNotExist:
-        prev_post = pk;
+        prev_post = 0
+    if(int(prev_post) == int(pk)):
+        prev_post = 0
     # get next post
     try:
-        next_post = post.get_next_by_pub_date().pk;
+        next_post = post.get_next_by_pub_date().pk
     except Post.DoesNotExist:
-        next_post = pk;
+        next_post = 0
+    if(int(next_post) == int(pk)):
+        next_post = 0
     # get first post
     ordered = Post.objects.order_by('pub_date', 'pk')
     first_post = ordered.first().pk
+    if(int(first_post) == int(pk)):
+        first_post = 0
     # get latest post
     last_post = ordered.last().pk
+    if(int(last_post) == int(pk)):
+        last_post = 0
     # get links to posts
     first_url = reverse('post', kwargs={'pk': first_post})
     prev_url = reverse('post', kwargs={'pk': prev_post})
@@ -97,6 +106,10 @@ def post_view(request, pk):
     # render template
     return render(request, 'blog/post.html', context={
         'post'      : post,
+        'first_post': first_post,
+        'prev_post' : prev_post,
+        'next_post' : next_post,
+        'last_post' : last_post,
         'first_url' : first_url,
         'prev_url'  : prev_url,
         'next_url'  : next_url,
