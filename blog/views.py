@@ -26,7 +26,7 @@ def jsonpost_view(request, pk):
     content = JSONRenderer().render(serializer.data)
     return HttpResponse(content) 
 
-def prevpost_view(request, pk):
+def prevpost_view(request, pk, tag):
     """
     returns the pk value of the post preceding the post given
     by the pk value
@@ -66,43 +66,81 @@ def latestpost_view(request):
         raise Http404("Unable to find any posts")
     return post_view(request, post.pk)
 
+def get_other_post(post, post_type, tag):
+    try:
+        if   (post_type == 'first'):
+            if (tag is not None):
+                mypost = Post.objects.filter(tags__name=tag).order_by('pub_date').first().pk
+            else:
+                mypost = Post.objects.order_by('pub_date').first().pk
+        elif (post_type == 'prev'):
+            if (tag is not None):
+                mypost = post.get_previous_by_pub_date(tags__name=tag).pk
+            else:
+                mypost = post.get_previous_by_pub_date().pk
+        elif (post_type == 'next'):
+            if (tag is not None):
+                mypost = post.get_next_by_pub_date(tags__name=tag).pk
+            else:
+                mypost = post.get_next_by_pub_date().pk
+        elif (post_type == 'latest'):
+            if (tag is not None):
+                mypost = Post.objects.filter(tags__name=tag).order_by('pub_date').last().pk
+            else:
+                mypost = Post.objects.order_by('pub_date').last().pk
+        else:
+            raise ValueError("type <%s> is not supported" % post_type)
+    except Post.DoesNotExist:
+        mypost = 0
+    if(int(mypost) == int(post.pk)):
+        mypost = 0
+    url = reverse('post', kwargs={'pk': mypost})
+    return (mypost, url)
+
 def post_view(request, pk):
     """
     Displays the contents of a blog post, given by the primary key
     """
+
     # get current post
     try:
         post = Post.objects.filter(pk=pk).select_related().get()
     except Post.DoesNotExist:
         raise Http404("Post does not exist")
     # get previous post
-    try:
-        prev_post = post.get_previous_by_pub_date().pk
-    except Post.DoesNotExist:
-        prev_post = 0
-    if(int(prev_post) == int(pk)):
-        prev_post = 0
+    (prev_post, prev_url) = get_other_post(post, 'prev', None);
     # get next post
-    try:
-        next_post = post.get_next_by_pub_date().pk
-    except Post.DoesNotExist:
-        next_post = 0
-    if(int(next_post) == int(pk)):
-        next_post = 0
+    (next_post, next_url) = get_other_post(post, 'next', None);
     # get first post
-    ordered = Post.objects.order_by('pub_date', 'pk')
-    first_post = ordered.first().pk
-    if(int(first_post) == int(pk)):
-        first_post = 0
+    (first_post, first_url) = get_other_post(post, 'first', None);
     # get latest post
-    last_post = ordered.last().pk
-    if(int(last_post) == int(pk)):
-        last_post = 0
-    # get links to posts
-    first_url = reverse('post', kwargs={'pk': first_post})
-    prev_url = reverse('post', kwargs={'pk': prev_post})
-    next_url = reverse('post', kwargs={'pk': next_post})
-    last_url = reverse('post', kwargs={'pk': last_post})
+    (last_post, last_url) = get_other_post(post, 'latest', None);
+
+    # get tag links 
+    tag_info = {}
+    for mytag in post.tags.all():
+        tag_links = {}
+        # get previous tag_post
+        (prev_tag_post, prev_tag_url) = get_other_post(post, 'prev', mytag.name);
+        # get next tag_post
+        (next_tag_post, next_tag_url) = get_other_post(post, 'next', mytag.name);
+        # get first tag_post
+        (first_tag_post, first_tag_url) = get_other_post(post, 'first', mytag.name);
+        # get latest tag_post
+        (last_tag_post, last_tag_url) = get_other_post(post, 'latest', mytag.name);
+
+        tag_links['prev_post']  = prev_tag_post
+        tag_links['prev_url']   = prev_tag_url
+        tag_links['next_post']  = next_tag_post
+        tag_links['next_url']   = next_tag_url
+        tag_links['first_post'] = first_tag_post
+        tag_links['first_url']  = first_tag_url
+        tag_links['last_post']  = last_tag_post
+        tag_links['last_url']   = last_tag_url
+        tag_links['name']       = mytag.name.ljust(16)
+
+        tag_info[mytag.name] = tag_links
+
     # render template
     return render(request, 'blog/post.html', context={
         'post'      : post,
@@ -114,6 +152,7 @@ def post_view(request, pk):
         'prev_url'  : prev_url,
         'next_url'  : next_url,
         'last_url'  : last_url,
+        'tag_info'  : tag_info,
     })
 
 

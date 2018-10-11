@@ -1,0 +1,25 @@
+{% if adventure.first_post %}
+  <a href="{{ adventure.first_url }}" class="w3-button w3-black w3-padding-large w3-margin-bottom">&laquo; First</a>
+{% else %}
+  <button class="w3-button w3-black w3-disabled w3-padding-large w3-margin-bottom">&laquo; First</button>
+{% endif %}
+
+{% if adventure.prev_post %}
+  <a href="{{ adventure.prev_url }}" class="w3-button w3-black w3-padding-large w3-margin-bottom">&lsaquo; Previous</a>
+{% else %}
+  <button class="w3-button w3-black w3-disabled w3-padding-large w3-margin-bottom">&lsaquo; Previous</button>
+{% endif %}
+
+<button class="w3-button w3-black w3-disabled w3-padding-large w3-margin-bottom"> {{ adventure.name }} </button>
+
+{% if adventure.next_post %}
+  <a href="{{ adventure.next_url }}" class="w3-button w3-black w3-padding-large w3-margin-bottom">Next &rsaquo;</a>
+{% else %}
+  <button class="w3-button w3-black w3-disabled w3-padding-large w3-margin-bottom">Next &rsaquo;</button>
+{% endif %}
+
+{% if adventure.last_post %}
+<a href="{{ adventure.latest.url }}" class="w3-button w3-black w3-padding-large w3-margin-bottom">Latest &raquo;</a>
+{% else %}
+  <button class="w3-button w3-black w3-disabled w3-padding-large w3-margin-bottom">Latest &raquo;</button>
+{% endif %}
